@@ -14,7 +14,7 @@ public class GreeterClientService : IGreeterClientService
 		try
 		{
 			var client = new Greeter.GreeterClient(channel);
-			var reply = await client.SayHelloAsync(new HelloRequest { Name = name }, cancellationToken: token);
+			var reply = await client.SayHelloAsync(new HelloRequest { Name = name }, deadline: DateTime.MaxValue, cancellationToken: token);
 
 			return reply.Message;
 		}
