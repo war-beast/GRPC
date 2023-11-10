@@ -19,10 +19,9 @@
     "Docker": {
       "commandName": "Docker",
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
-      "environmentVariables": {
-        "ASPNETCORE_URLS": "http://+:80",
-        "GRPC_DNS_RESOLVER": "native"
-      },
+        "environmentVariables": {
+            "ASPNETCORE_URLS": "https://+:443;http://+:80"
+        },
       "publishAllPorts": true
     }
   }
