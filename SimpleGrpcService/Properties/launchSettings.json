@@ -14,15 +14,16 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": true,
-      "applicationUrl": "https://localhost:7037;http://localhost:5112"
-    },
-    "Docker": {
-      "commandName": "Docker",
-      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
-        "environmentVariables": {
-            "ASPNETCORE_URLS": "https://+:443;http://+:80"
-        },
-      "publishAllPorts": true
-    }
+      "applicationUrl": "https://localhost:7037;http://localhost:5112",
+      "useSSL": true
+    //},
+    //"Docker": {
+    //  "commandName": "Docker",
+    //  "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+    //  "environmentVariables": {
+    //    "ASPNETCORE_URLS": "http://+:80"
+    //  },
+    //  "publishAllPorts": true
+    //}
   }
 }
