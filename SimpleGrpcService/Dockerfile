@@ -19,6 +19,4 @@ RUN dotnet publish "SimpleGrpcService.csproj" -c Release -o /app/publish /p:UseA
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-COPY ./Ssl/ /app/ssl
-RUN chmod 600 /app/ssl/localhost.pfx -p pass
 ENTRYPOINT ["dotnet", "SimpleGrpcService.dll"]
