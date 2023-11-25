@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Security.Authentication;
+using System.Transactions;
 using GRPC.Client.Interfaces;
 using Grpc.Core;
 using Grpc.Net.Client;
@@ -18,19 +19,11 @@ public class GreeterClientService : IGreeterClientService
 
 	public async Task<string> CallGreeterMessage(string name, CancellationToken token)
 	{
-		//AppContext.SetSwitch("Microsoft.AspNetCore.Server.Kestrel.EnableWindows81Http2", true);
-		//HttpClient.DefaultProxy = new WebProxy();
-		//var httpClient = _httpClientFactory.CreateClient();
-		//httpClient.DefaultRequestVersion = new Version(2, 0);
-		//httpClient.DefaultVersionPolicy = HttpVersionPolicy.RequestVersionOrLower;
+		var handler = new HttpClientHandler();
+		handler.ServerCertificateCustomValidationCallback =
+			HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
 
-		//var handler = new HttpClientHandler();
-		//handler.ServerCertificateCustomValidationCallback =
-		//	HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-		var handler = new GrpcWebHandler(GrpcWebMode.GrpcWebText, new HttpClientHandler());
-		handler.HttpVersion = new Version(1, 1);
-
-		using var channel = GrpcChannel.ForAddress("https://localhost:7037", new GrpcChannelOptions{ HttpHandler = handler});
+		using var channel = GrpcChannel.ForAddress("https://host.docker.internal:7037", new GrpcChannelOptions { HttpHandler = handler });
 
 		try
 		{
