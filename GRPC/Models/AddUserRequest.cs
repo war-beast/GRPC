@@ -1,3 +1,5 @@
-﻿namespace GRPC.Client.Models;
+﻿using System.ComponentModel.DataAnnotations;
 
-public record AddUserRequest(string Email, string Password, string Name);
+namespace GRPC.Client.Models;
+
+public record AddUserRequest([EmailAddress] string Email, [Required] string Password, [Required] string Name);
