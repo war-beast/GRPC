@@ -1,22 +1,10 @@
-﻿using System.Net;
-using System.Security.Authentication;
-using System.Transactions;
+﻿using Grpc.Net.Client;
 using GRPC.Client.Interfaces;
-using Grpc.Core;
-using Grpc.Net.Client;
-using Grpc.Net.Client.Web;
 
 namespace GRPC.Client.Services;
 
 public class GreeterClientService : IGreeterClientService
 {
-	private readonly IHttpClientFactory _httpClientFactory;
-
-	public GreeterClientService(IHttpClientFactory httpClientFactory)
-	{
-		_httpClientFactory = httpClientFactory;
-	}
-
 	public async Task<string> CallGreeterMessage(string name, CancellationToken token)
 	{
 		var handler = new HttpClientHandler();
