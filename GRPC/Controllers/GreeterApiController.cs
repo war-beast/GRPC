@@ -1,4 +1,5 @@
 ﻿using GRPC.Client.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GRPC.Controllers;
@@ -15,10 +16,13 @@ public class GreeterApiController : ControllerBase
 	}
 
 	[HttpGet("greet/{name}")]
+	[Authorize]
 	public async Task<IActionResult> CallGreet(string? name, CancellationToken token)
 	{
+		var auth = Request.Headers["Authorization"];
+
 		return name == null 
 			? BadRequest("Сорян, но без имени никак.") 
-			: Ok(await _greeterClientService.CallGreeterMessage(name, token));
+			: Ok(await _greeterClientService.CallGreeterMessage(name, auth.First(), token));
 	}
 }

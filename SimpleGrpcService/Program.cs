@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Shared;
 using SimpleGrpcService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,15 +10,40 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddGrpc(opt => opt.EnableDetailedErrors = true);
+builder.Services
+	.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+	.AddJwtBearer(options =>
+	{
+		options.RequireHttpsMetadata = true;
+		options.TokenValidationParameters = new TokenValidationParameters
+		{
+			// укзывает, будет ли валидироваться издатель при валидации токена
+			ValidateIssuer = true,
+			// строка, представляющая издателя
+			ValidIssuer = AuthOptions.ISSUER,
+
+			// будет ли валидироваться потребитель токена
+			ValidateAudience = true,
+			// установка потребителя токена
+			ValidAudience = AuthOptions.AUDIENCE,
+			// будет ли валидироваться время существования
+			ValidateLifetime = true,
+
+			// установка ключа безопасности
+			IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+			// валидация ключа безопасности
+			ValidateIssuerSigningKey = true
+		};
+		options.SaveToken = true;
+	});
 builder.Services.AddAuthorization();
-builder.Services.AddAuthentication("Bearer").AddJwtBearer();
 
 var app = builder.Build();
 
 app.UseGrpcWeb();
 
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseAuthorization();
 
 // Configure the HTTP request pipeline.
 app.MapGrpcService<GreeterService>()

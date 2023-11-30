@@ -8,6 +8,7 @@ using DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using Shared;
 
 namespace GRPC.Client.Services;
 
@@ -32,12 +33,12 @@ public class UserService : IUserService
 
 			var now = DateTime.UtcNow;
 			JwtSecurityToken jwt = new(
-				issuer: "grpcApp",
-				audience: "grpcAppUser",
+				issuer: AuthOptions.ISSUER,
+				audience: AuthOptions.AUDIENCE,
 				notBefore: now,
 				claims: identity.Claims,
-				expires: now.AddDays(1),
-				signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes("какой-то ключ для подписи токена jwt")), SecurityAlgorithms.HmacSha256));
+				expires: now.AddDays(AuthOptions.LIFETIME),
+				signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
 
 			var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
 			return encodedJwt;
@@ -74,6 +75,6 @@ public class UserService : IUserService
 			new("userId", user.Id.ToString())
 		};
 
-		return new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+		return new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType, string.Empty);
 	}
 }
