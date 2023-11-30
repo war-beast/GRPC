@@ -17,9 +17,11 @@ public class GreeterClientService : IGreeterClientService
 
 	public async Task<string> CallGreeterMessage(string name, string jwt, CancellationToken token)
 	{
-		var handler = new HttpClientHandler();
-		handler.ServerCertificateCustomValidationCallback =
-			HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+		var handler = new HttpClientHandler
+		{
+			ServerCertificateCustomValidationCallback =
+			HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+		};
 
 		using var channel = GrpcChannel.ForAddress($"https://{_network.Host}:7037", new GrpcChannelOptions { HttpHandler = handler });
 
