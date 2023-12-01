@@ -34,6 +34,7 @@
 
   <ItemGroup>
     <Folder Include="Services\" />
+    <Folder Include="ssl\" />
   </ItemGroup>
 
   <ItemGroup>
