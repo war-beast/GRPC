@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+option csharp_namespace = "GRPC.Client";
+import "google/protobuf/wrappers.proto";
+
+package intermediate;
+
+// The greeting service definition.
+service Intermediate {
+	// Sends a greeting
+	rpc ResendMessage (ResendRequest) returns (ResendReply);
+}
+
+// The request message containing the user's name.
+message ResendRequest {
+	string name = 1;
+	repeated int32 digits = 2;
+	google.protobuf.Int32Value nullableInt = 3;
+}
+
+// The response message containing the greetings.
+message ResendReply {
+	bool result = 1;
+}

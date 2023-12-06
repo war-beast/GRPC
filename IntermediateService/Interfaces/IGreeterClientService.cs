@@ -1,4 +1,4 @@
-﻿namespace GRPC.Client.Interfaces;
+﻿namespace IntermediateService.Interfaces;
 
 public interface IGreeterClientService
 {
