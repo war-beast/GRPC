@@ -1,39 +1,28 @@
 ﻿using Grpc.Core;
-using Grpc.Net.Client;
+using Grpc.Net.ClientFactory;
 using GRPC.Client.Interfaces;
-using GRPC.Client.Models;
-using Microsoft.Extensions.Options;
 
 namespace GRPC.Client.Services;
 
 public class GreeterClientService : IGreeterClientService
 {
-	private readonly Network _network;
+	private readonly Greeter.GreeterClient _client;
 
-	public GreeterClientService(IOptions<Network> networkSnapshot)
+	public GreeterClientService(Greeter.GreeterClient client)
 	{
-		_network = networkSnapshot.Value;
+		_client= client;
 	}
 
 	public async Task<string> CallGreeterMessage(string name, string jwt, CancellationToken token)
 	{
-		var handler = new HttpClientHandler
-		{
-			ServerCertificateCustomValidationCallback =
-			HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-		};
-
-		using var channel = GrpcChannel.ForAddress($"https://{_network.Host}:7037", new GrpcChannelOptions { HttpHandler = handler });
-
 		try
 		{
-			var client = new Greeter.GreeterClient(channel);
 			var headers = new Metadata
 			{
 				{ "Authorization", jwt }
 			};
 
-			var reply = await client.SayHelloAsync(new HelloRequest { Name = name }, headers, DateTime.MaxValue, token);
+			var reply = await _client.SayHelloAsync(new HelloRequest { Name = name }, headers, deadline: DateTime.UtcNow.Add(TimeSpan.FromSeconds(5)), token);
 
 			return reply.Message;
 		}

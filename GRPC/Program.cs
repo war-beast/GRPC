@@ -47,6 +47,7 @@ builder.Services.Configure<Network>(builder.Configuration.GetSection("Docker"));
 var connectionString = $"Host={builder.Configuration.GetSection("Docker:Host").Value}{builder.Configuration.GetSection("Database:ConnectionString").Value}";
 builder.Services.InitDatabase(connectionString);
 
+builder.Services.AddRpcClients(builder.Configuration);
 builder.Services.AddCustomServices();
 
 var app = builder.Build();
