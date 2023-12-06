@@ -2,5 +2,5 @@
 
 public interface IGreeterClientService
 {
-	Task<string> CallGreeterMessage(string name, CancellationToken token);
+	Task<string> CallGreeterMessage(string name, string jwt, CancellationToken token);
 }
