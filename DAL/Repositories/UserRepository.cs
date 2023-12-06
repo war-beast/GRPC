@@ -35,11 +35,11 @@ public class UserRepository : IRepository<AppUser>
 		return _context.AppUsers.FirstAsync(x => x.Id == id, token);
 	}
 
-	public async Task Update(AppUser entity, CancellationToken token)
+	public Task Update(AppUser entity, CancellationToken token)
 	{
 		_context.Entry(entity).State = EntityState.Modified;
 
-		await _context.SaveChangesAsync(token);
+		return _context.SaveChangesAsync(token);
 	}
 
 	public async Task Delete(Guid id, CancellationToken token)
