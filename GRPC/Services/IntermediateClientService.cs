@@ -21,7 +21,7 @@ public class IntermediateClientService : IIntermediateClientService
 				{ "Authorization", jwt }
 			};
 
-			var reply = await _client.ResendMessageAsync(request, headers, deadline: DateTime.UtcNow.Add(TimeSpan.FromSeconds(10)), token);
+			var reply = await _client.ResendMessageAsync(request, headers, deadline: DateTime.UtcNow.Add(TimeSpan.FromMinutes(20)), token);
 
 			return reply.Result;
 		}

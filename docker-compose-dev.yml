@@ -28,6 +28,22 @@ services:
           - service-db
         volumes:
             - pgadmin-data:/var/lib/pgadmin
+            
+
+    ###### MongoDB
+
+    mongodb:
+        image: mongodb
+        container_name: mongodb
+        build: 
+            context: ./db
+            dockerfile: Dockerfile
+        hostname: mongodb
+        ports:
+            - 27017:27017
+        command: --bind_ip_all --quiet
+        logging:
+            driver: none
 
 volumes:
   db-data:

@@ -31,7 +31,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Intermediate.DAL\Intermediate.DAL.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="ssl\local.pfx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

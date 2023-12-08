@@ -1,4 +1,6 @@
 using Grpc.Core;
+using Intermediate.DAL.Entities;
+using Intermediate.DAL.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 
 namespace IntermediateService.Services
@@ -8,12 +10,15 @@ namespace IntermediateService.Services
 	{
 		private readonly ILogger<IntermediateService> _logger;
 		private readonly Greeter.GreeterClient _client;
+		private readonly IRequestRepository _requestRepository;
 
 		public IntermediateService(ILogger<IntermediateService> logger, 
-			Greeter.GreeterClient client)
+			Greeter.GreeterClient client, 
+			IRequestRepository requestRepository)
 		{
 			_logger = logger;
 			_client = client;
+			_requestRepository = requestRepository;
 		}
 
 		public override async Task<ResendReply> ResendMessage(ResendRequest request, ServerCallContext context)
@@ -25,6 +30,17 @@ namespace IntermediateService.Services
 				var reply = await _client.SayHelloAsync(new HelloRequest { Name = request.Name}, headers, deadline: context.Deadline, context.CancellationToken);
 
 				_logger.LogInformation("Получен ответ: {reply}", reply.Message);
+
+				var contextRequest = new Request
+				{
+					AppUserName = "Auth user name",
+					CallDateTime = DateTime.UtcNow,
+					RequestDigits = request.Digits,
+					RequestInteger = request.NullableInt,
+					RequestName = request.Name
+				};
+
+				await _requestRepository.SaveRequest(contextRequest);
 			}
 			catch (Exception e)
 			{

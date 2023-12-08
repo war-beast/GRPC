@@ -40,6 +40,7 @@ builder.Services.AddAuthorization();
 builder.Services.Configure<Network>(builder.Configuration.GetSection("Docker"));
 
 builder.Services.AddRpcClients(builder.Configuration);
+builder.Services.AddDataLayer(builder.Configuration);
 
 var app = builder.Build();
 
