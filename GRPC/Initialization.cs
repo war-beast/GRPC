@@ -11,6 +11,7 @@ public static class Initialization
 	public static void AddCustomServices(this IServiceCollection services)
 	{
 		services.AddTransient<IGreeterClientService, GreeterClientService>();
+		services.AddTransient<IIntermediateClientService, IntermediateClientService>();
 		services.AddTransient<IUserService, UserService>();
 
 		services.AddScoped<IRepository<AppUser>, UserRepository>();

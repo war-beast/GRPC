@@ -1,7 +1,7 @@
 ﻿using Grpc.Core;
-using GRPC.Client.Interfaces;
+using IntermediateService.Interfaces;
 
-namespace GRPC.Client.Services;
+namespace IntermediateService.Services;
 
 public class GreeterClientService : IGreeterClientService
 {

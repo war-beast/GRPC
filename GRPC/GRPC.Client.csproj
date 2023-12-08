@@ -10,14 +10,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="ssl\**" />
-    <Content Remove="ssl\**" />
-    <EmbeddedResource Remove="ssl\**" />
-    <None Remove="ssl\**" />
+    <None Remove="Protos\intermediate.proto" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.25.1" />
+    <PackageReference Include="Grpc.AspNetCore.Server.ClientFactory" Version="2.59.0" />
     <PackageReference Include="Grpc.Net.Client" Version="2.59.0" />
     <PackageReference Include="Grpc.Net.Client.Web" Version="2.59.0" />
     <PackageReference Include="Grpc.Net.ClientFactory" Version="2.59.0" />
@@ -37,6 +35,7 @@
 
   <ItemGroup>
     <Protobuf Include="Protos\greet.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\intermediate.proto" GrpcServices="Client" />
   </ItemGroup>
 
   <ItemGroup>

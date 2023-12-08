@@ -19,5 +19,5 @@ RUN dotnet publish "GRPC.Client.csproj" -c Release -o /app/publish /p:UseAppHost
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-RUN dotnet dev-certs https
+COPY "GRPC/ssl/local.pfx" /app/ssl/local.pfx
 ENTRYPOINT ["dotnet", "GRPC.Client.dll"]

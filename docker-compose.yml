@@ -28,6 +28,21 @@ services:
           - service-db
         volumes:
             - pgadmin-data:/var/lib/pgadmin
+
+    ###### MongoDB
+
+    mongodb:
+        image: mongodb
+        container_name: mongodb
+        build: 
+            context: ./db
+            dockerfile: Dockerfile
+        hostname: mongodb
+        ports:
+            - 27017:27017
+        command: --bind_ip_all --quiet
+        logging:
+            driver: none
       
     web:
         image: api
@@ -50,6 +65,8 @@ services:
         depends_on:
           - service-db
         environment:
+          - ASPNETCORE_Kestrel__Certificates__Default__Password=pass
+          - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/ssl/local.pfx
           - ASPNETCORE_URLS=https://+:443;http://+:80
           - ASPNETCORE_ENVIRONMENT=Development
           - ASPNETCORE_HTTPS_PORT=7194
@@ -73,9 +90,38 @@ services:
         depends_on:
           - service-db
         environment:
+          - ASPNETCORE_Kestrel__Certificates__Default__Password=pass
+          - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/ssl/local.pfx
           - ASPNETCORE_URLS=https://+:443;http://+:80
           - ASPNETCORE_ENVIRONMENT=Development
           - ASPNETCORE_HTTPS_PORT=7037
+      
+    intermediate:
+        image: inter-service
+        container_name: inter-service
+        build: 
+          context: .
+          dockerfile: IntermediateService/dev.Dockerfile
+        volumes:
+          - /app/IntermediateService/bin
+          - /app/IntermediateService/obj
+          - /app/Shared/bin
+          - /app/Shared/obj
+          - /app/Intermediate.DAL/bin
+          - /app/Intermediate.DAL/obj
+          - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+          - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+        ports:
+          - "7124:443"
+          - "5137:80"
+        depends_on:
+          - mongodb
+        environment:
+          - ASPNETCORE_Kestrel__Certificates__Default__Password=pass
+          - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/ssl/local.pfx
+          - ASPNETCORE_URLS=https://+:443;http://+:80
+          - ASPNETCORE_ENVIRONMENT=Development
+          - ASPNETCORE_HTTPS_PORT=7124
 
 volumes:
   db-data:

@@ -1,7 +1,6 @@
-using DAL;
-using GRPC;
-using GRPC.Client.Extensions;
-using GRPC.Client.Models;
+using IntermediateService;
+using IntermediateService.Models;
+using IntermediateService.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Shared;
@@ -9,12 +8,7 @@ using Shared;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
+builder.Services.AddGrpc(opt => opt.EnableDetailedErrors = true);
 builder.Services
 	.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 	.AddJwtBearer(options =>
@@ -41,31 +35,24 @@ builder.Services
 		};
 		options.SaveToken = true;
 	});
+builder.Services.AddAuthorization();
 
 builder.Services.Configure<Network>(builder.Configuration.GetSection("Docker"));
 
-var connectionString = $"Host={builder.Configuration.GetSection("Docker:Host").Value}{builder.Configuration.GetSection("Database:ConnectionString").Value}";
-builder.Services.InitDatabase(connectionString);
-
 builder.Services.AddRpcClients(builder.Configuration);
-builder.Services.AddCustomServices();
+builder.Services.AddDataLayer(builder.Configuration);
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
-app.MigrateDatabase<AppDataContext>();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-	app.UseSwagger();
-	app.UseSwaggerUI();
-}
-
-app.UseHttpsRedirection();
+app.UseGrpcWeb();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+// Configure the HTTP request pipeline.
+app.MapGrpcService<IntermediateService.Services.IntermediateService>()
+	.EnableGrpcWeb();
+app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
 
 app.Run();
