@@ -1,6 +1,7 @@
 ﻿using GRPC.Client;
 using GRPC.Client.Interfaces;
 using GRPC.Client.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,14 +22,14 @@ public class IntermediateServiceController : ControllerBase
 	[Authorize]
 	public async Task<IActionResult> CallIntermediate(InterRequest request, CancellationToken token)
 	{
-		var auth = Request.Headers["Authorization"];
+		var auth = Request.Headers.Authorization;
 
 		var result = await _clientService.CallIntermediateMessage(new ResendRequest
 		{
 			Digits = { request.Digits },
 			Name = request.Name,
 			NullableInt = request.NullableInt
-		}, auth.First(), token);
+		}, auth.First(x => x != null && x.Contains(JwtBearerDefaults.AuthenticationScheme))!, token);
 
 		return result
 			? Ok()
