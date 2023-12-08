@@ -21,7 +21,7 @@ public class GreeterClientService : IGreeterClientService
 				{ "Authorization", jwt }
 			};
 
-			var reply = await _client.SayHelloAsync(new HelloRequest { Name = name }, headers, deadline: DateTime.UtcNow.Add(TimeSpan.FromSeconds(5)), token);
+			var reply = await _client.SayHelloAsync(new HelloRequest { Name = name }, headers, deadline: DateTime.UtcNow.Add(TimeSpan.FromSeconds(30)), token);
 
 			return reply.Message;
 		}
