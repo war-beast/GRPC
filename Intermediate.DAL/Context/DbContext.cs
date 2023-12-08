@@ -18,13 +18,13 @@ namespace Intermediate.DAL.Context
             {
                 var isConnected = Database.RunCommandAsync((Command<MongoDB.Bson.BsonDocument>)"{ping:1}").Wait(10_000);
                 if (isConnected)
-	                logger.LogInformation("Successfully connected to database {server}", connectionString);
+	                logger.LogInformation("Успешное соединений к базе данных {server}", connectionString);
                 else
-                    logger.LogCritical("Can't perform ping to database {server}", connectionString);
+                    logger.LogCritical("БД не пингуется {server}", connectionString);
             }
             catch (Exception ex)
             {
-	            logger.LogCritical(ex, "Error while checking connection to database {server}", connectionString);
+	            logger.LogCritical(ex, "Ошибка подключения к базе данных {server}", connectionString);
             }
         }
     }

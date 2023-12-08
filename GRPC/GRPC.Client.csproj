@@ -10,13 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="ssl\**" />
-    <Content Remove="ssl\**" />
-    <EmbeddedResource Remove="ssl\**" />
-    <None Remove="ssl\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="Protos\intermediate.proto" />
   </ItemGroup>
 

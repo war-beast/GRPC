@@ -32,11 +32,11 @@ namespace IntermediateService.Services
 
 				var reply = await _client.SayHelloAsync(new HelloRequest { Name = request.Name}, headers, deadline: context.Deadline, context.CancellationToken);
 
-				_logger.LogInformation("������� �����: {reply}", reply.Message);
+				_logger.LogInformation("Получен ответ (reply received): {reply}", reply.Message);
 
 				var contextRequest = new Request
 				{
-					AppUserName = _contextAccessor.HttpContext?.User.Identity?.Name ?? "Unauthenticated user",
+					AppUserName = _contextAccessor.HttpContext?.User.Identity?.Name ?? "Неопознанный пользователь",
 					CallDateTime = DateTime.UtcNow,
 					RequestDigits = request.Digits,
 					RequestInteger = request.NullableInt,

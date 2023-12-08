@@ -65,6 +65,8 @@ services:
         depends_on:
           - service-db
         environment:
+          - ASPNETCORE_Kestrel__Certificates__Default__Password=pass
+          - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/ssl/local.pfx
           - ASPNETCORE_URLS=https://+:443;http://+:80
           - ASPNETCORE_ENVIRONMENT=Development
           - ASPNETCORE_HTTPS_PORT=7194
@@ -88,11 +90,13 @@ services:
         depends_on:
           - service-db
         environment:
+          - ASPNETCORE_Kestrel__Certificates__Default__Password=pass
+          - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/ssl/local.pfx
           - ASPNETCORE_URLS=https://+:443;http://+:80
           - ASPNETCORE_ENVIRONMENT=Development
           - ASPNETCORE_HTTPS_PORT=7037
       
-    intermediate-2:
+    intermediate:
         image: inter-service
         container_name: inter-service
         build: 
@@ -113,6 +117,8 @@ services:
         depends_on:
           - mongodb
         environment:
+          - ASPNETCORE_Kestrel__Certificates__Default__Password=pass
+          - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/ssl/local.pfx
           - ASPNETCORE_URLS=https://+:443;http://+:80
           - ASPNETCORE_ENVIRONMENT=Development
           - ASPNETCORE_HTTPS_PORT=7124

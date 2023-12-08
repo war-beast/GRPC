@@ -19,5 +19,5 @@ RUN dotnet publish "SimpleGrpcService.csproj" -c Release -o /app/publish /p:UseA
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-RUN dotnet dev-certs https
+COPY "SimpleGrpcService/ssl/local.pfx" /app/ssl/local.pfx
 ENTRYPOINT ["dotnet", "SimpleGrpcService.dll"]
