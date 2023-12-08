@@ -41,6 +41,7 @@ builder.Services.Configure<Network>(builder.Configuration.GetSection("Docker"));
 
 builder.Services.AddRpcClients(builder.Configuration);
 builder.Services.AddDataLayer(builder.Configuration);
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 

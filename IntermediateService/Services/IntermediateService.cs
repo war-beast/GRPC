@@ -11,14 +11,17 @@ namespace IntermediateService.Services
 		private readonly ILogger<IntermediateService> _logger;
 		private readonly Greeter.GreeterClient _client;
 		private readonly IRequestRepository _requestRepository;
+		private readonly IHttpContextAccessor _contextAccessor;
 
 		public IntermediateService(ILogger<IntermediateService> logger, 
 			Greeter.GreeterClient client, 
-			IRequestRepository requestRepository)
+			IRequestRepository requestRepository, 
+			IHttpContextAccessor contextAccessor)
 		{
 			_logger = logger;
 			_client = client;
 			_requestRepository = requestRepository;
+			_contextAccessor = contextAccessor;
 		}
 
 		public override async Task<ResendReply> ResendMessage(ResendRequest request, ServerCallContext context)
@@ -33,7 +36,7 @@ namespace IntermediateService.Services
 
 				var contextRequest = new Request
 				{
-					AppUserName = "Auth user name",
+					AppUserName = _contextAccessor.HttpContext?.User.Identity?.Name ?? "Unauthenticated user",
 					CallDateTime = DateTime.UtcNow,
 					RequestDigits = request.Digits,
 					RequestInteger = request.NullableInt,
