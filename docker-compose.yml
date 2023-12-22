@@ -68,7 +68,7 @@ services:
           - ASPNETCORE_Kestrel__Certificates__Default__Password=pass
           - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/ssl/local.pfx
           - ASPNETCORE_URLS=https://+:443;http://+:80
-          - ASPNETCORE_ENVIRONMENT=Development
+          - ASPNETCORE_ENVIRONMENT=Release
           - ASPNETCORE_HTTPS_PORT=7194
       
     simple-greeter:
@@ -93,7 +93,7 @@ services:
           - ASPNETCORE_Kestrel__Certificates__Default__Password=pass
           - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/ssl/local.pfx
           - ASPNETCORE_URLS=https://+:443;http://+:80
-          - ASPNETCORE_ENVIRONMENT=Development
+          - ASPNETCORE_ENVIRONMENT=Release
           - ASPNETCORE_HTTPS_PORT=7037
       
     intermediate:
@@ -120,8 +120,29 @@ services:
           - ASPNETCORE_Kestrel__Certificates__Default__Password=pass
           - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/ssl/local.pfx
           - ASPNETCORE_URLS=https://+:443;http://+:80
-          - ASPNETCORE_ENVIRONMENT=Development
+          - ASPNETCORE_ENVIRONMENT=Release
           - ASPNETCORE_HTTPS_PORT=7124
+      
+    json-transform:
+        image: json-encoded
+        container_name: json-encoded
+        build: 
+          context: .
+          dockerfile: JsonTranscoding/dev.Dockerfile
+        volumes:
+          - /app/JsonTranscoding/bin
+          - /app/JsonTranscoding/obj
+          - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+          - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+        ports:
+          - "7184:443"
+          - "5236:80"
+        environment:
+          - ASPNETCORE_Kestrel__Certificates__Default__Password=pass
+          - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/ssl/local.pfx
+          - ASPNETCORE_URLS=https://+:443;http://+:80
+          - ASPNETCORE_ENVIRONMENT=Release
+          - ASPNETCORE_HTTPS_PORT=7184
 
 volumes:
   db-data:
