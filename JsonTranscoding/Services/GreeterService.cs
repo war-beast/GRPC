@@ -18,5 +18,18 @@ namespace JsonTranscoding.Services
 				Message = "Hello " + request.Name
 			});
 		}
+
+		public override Task<GreetResponse> ProcessMessage(GreetRequest request, ServerCallContext context)
+		{
+			var reversedCategories = request.Categories
+				.ToArray()
+				.Reverse();
+
+			return Task.FromResult(new GreetResponse
+			{
+				Text = $"Request from {context.Host}: {request.Name} - {request.Age}",
+				Categories = { reversedCategories }
+			});
+		}
 	}
 }

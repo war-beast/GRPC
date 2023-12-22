@@ -13,6 +13,13 @@ service Greeter {
 		  get: "/v1/greeter/{name}"
 	  };
   };
+
+  rpc ProcessMessage(GreetRequest) returns (GreetResponse){
+    option (google.api.http) = {
+      post: "/v1/greeter",
+	  body: "*"
+    };
+  }
 }
 
 // The request message containing the user's name.
@@ -23,4 +30,16 @@ message HelloRequest {
 // The response message containing the greetings.
 message HelloReply {
   string message = 1;
+}
+
+//POST request
+message GreetRequest{
+	string name = 1;
+	int32 age = 2;
+	repeated string categories = 3;
+}
+
+message GreetResponse{
+	repeated string categories = 1;
+	string text = 2;
 }
