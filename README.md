@@ -6,8 +6,8 @@
 
 Grpc - внешний API (API-гейт)
 
-SimpleGrpcService - простой микросервис приветсвия
+SimpleGrpcService - простой микросервис приветствия
 
-IntermediateService - промежуточный сервис между API и сеовисов приветствия (timeout propagation)
+IntermediateService - промежуточный сервис между API и сервисом приветствия (timeout propagation)
 
 JsonTranscoding - сервис с сериализацией запросов в формат JSON
