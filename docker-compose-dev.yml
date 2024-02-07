@@ -44,6 +44,19 @@ services:
         command: --bind_ip_all --quiet
         logging:
             driver: none
+            
+    minio:
+        image: quay.io/minio/minio
+        command: server /data --console-address ":9090"
+        restart: always
+        ports:
+          - 9000:9000
+          - 9090:9090
+        volumes:
+          - ~/minio/data:/data
+        environment:
+          - MINIO_ROOT_USER=admin
+          - MINIO_ROOT_PASSWORD=adminadmin
 
 volumes:
   db-data:

@@ -30,7 +30,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntermediateService", "Inte
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Intermediate.DAL", "Intermediate.DAL\Intermediate.DAL.csproj", "{20ED8395-6154-4255-8CED-F9152E993EB0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonTranscoding", "JsonTranscoding\JsonTranscoding.csproj", "{039009B2-31FB-459E-9015-C7BF5B431EAA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JsonTranscoding", "JsonTranscoding\JsonTranscoding.csproj", "{039009B2-31FB-459E-9015-C7BF5B431EAA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileUploader", "FileUploader\FileUploader.csproj", "{FB4E66E4-1F53-4C90-B29F-742BF45A1E2E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -66,6 +68,10 @@ Global
 		{039009B2-31FB-459E-9015-C7BF5B431EAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{039009B2-31FB-459E-9015-C7BF5B431EAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{039009B2-31FB-459E-9015-C7BF5B431EAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB4E66E4-1F53-4C90-B29F-742BF45A1E2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB4E66E4-1F53-4C90-B29F-742BF45A1E2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB4E66E4-1F53-4C90-B29F-742BF45A1E2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB4E66E4-1F53-4C90-B29F-742BF45A1E2E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
