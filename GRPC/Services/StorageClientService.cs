@@ -1,4 +1,5 @@
 ﻿using Google.Protobuf;
+using Grpc.Net.Client;
 using GRPC.Client.Interfaces;
 using static GRPC.Client.FileOP;
 
@@ -6,47 +7,49 @@ namespace GRPC.Client.Services
 {
 	public class StorageClientService : IStorageClientService
 	{
-		private readonly FileOPClient _fileOPClient;
-
 		private const string Appcode = "grpcClient";
+		private readonly FileOPClient _client;
 
-		public StorageClientService(FileOPClient fileOPClient)
+		public StorageClientService(FileOPClient client)
 		{
-			_fileOPClient = fileOPClient;
+			_client = client;
 		}
 
-		public async Task UploadFile(IFormFile file)
+		public async Task<string> UploadFile(IFormFile file)
 		{
-			var stream = file.OpenReadStream();
-
+			using var stream = file.OpenReadStream();
 			var totallength = file.Length;
-			var clientCall = _fileOPClient.UploadFile();
-			var RequestStream = clientCall.RequestStream;
 			var buffer = new byte[1024 * 1024];
+
+			var request = _client.UploadFile();
+
 			FileUploadStatus fileOpResult;
 			try
 			{
-				// Will send the files to be up to the GRPC server
 				while (totallength > 0)
 				{
 					var len = await stream.ReadAsync(buffer);
 					totallength -= len;
-					await RequestStream.WriteAsync(new FileChunk
+					await request.RequestStream.WriteAsync(new FileChunk
 					{
 						FileName = file.FileName,
 						NameSpace = Appcode,
 						FileData = ByteString.CopyFrom(buffer, 0, len)
 					});
 				}
-				await RequestStream.CompleteAsync();
-				fileOpResult = await clientCall.ResponseAsync;
+				await request.RequestStream.CompleteAsync();
+				fileOpResult = await request.ResponseAsync;
+			}
+			catch (Exception exc)
+			{
+				return exc.Message ?? exc.InnerException?.Message ?? "error";
 			}
 			finally
 			{
 				stream.Close();
-				stream.Dispose();
-				clientCall.Dispose();
 			}
+
+			return string.Empty;
 		}
 	}
 }

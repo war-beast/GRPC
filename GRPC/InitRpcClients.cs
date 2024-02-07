@@ -31,6 +31,11 @@ public static class InitRpcClients
 		services.AddGrpcClient<FileOP.FileOPClient>("FileStorage", opt =>
 		{
 			opt.Address = new Uri($"https://{host}:{config.GetSection("RpcServicesPorts:FileStorage").Value}");
-		});
+		})
+			.ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+			{
+				ServerCertificateCustomValidationCallback =
+					HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+			});
 	}
 }

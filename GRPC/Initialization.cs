@@ -13,6 +13,7 @@ public static class Initialization
 		services.AddTransient<IGreeterClientService, GreeterClientService>();
 		services.AddTransient<IIntermediateClientService, IntermediateClientService>();
 		services.AddTransient<IUserService, UserService>();
+		services.AddTransient<IStorageClientService, StorageClientService>();
 
 		services.AddScoped<IRepository<AppUser>, UserRepository>();
 	}

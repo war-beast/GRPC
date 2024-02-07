@@ -2,6 +2,6 @@
 {
 	public interface IStorageClientService
 	{
-		Task UploadFile(IFormFile file);
+		Task<string> UploadFile(IFormFile file);
 	}
 }
