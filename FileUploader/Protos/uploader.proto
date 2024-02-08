@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+option csharp_namespace = "FileService";
+
+package uploader;
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
+
+service FileOP {
+    rpc UploadFile (stream FileChunk) returns (FileUploadStatus);
+	rpc GetFilesList (google.protobuf.Empty) returns (stream FileList);
+}
+
+message FileChunk {
+    // File name, no path, including extension
+	string  file_name = 1;
+	// File content, the content is empty when the list of query files is
+	google.protobuf.BytesValue file_data = 2;
+	// File Store Namespace
+	google.protobuf.StringValue name_space = 3;
+}
+
+message FileUploadStatus {
+    bool ok = 1;
+	// Transfer success will generate a unique identifier
+	reserved 2;
+	google.protobuf.StringValue msg = 3;
+	string file_name = 4;
+}
+
+message FileList {
+	string fileName = 1;
+}
+
