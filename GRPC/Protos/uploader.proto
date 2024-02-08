@@ -5,9 +5,11 @@ option csharp_namespace = "GRPC.Client";
 package uploader;
 
 import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
 
 service FileOP {
     rpc UploadFile (stream FileChunk) returns (FileUploadStatus);
+	rpc GetFilesList (google.protobuf.Empty) returns (stream FileList);
 }
 
 message FileChunk {
@@ -27,3 +29,6 @@ message FileUploadStatus {
 	string file_name = 4;
 }
 
+message FileList {
+	string fileName = 1;
+}

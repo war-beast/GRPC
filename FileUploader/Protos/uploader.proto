@@ -5,9 +5,11 @@ option csharp_namespace = "FileService";
 package uploader;
 
 import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
 
 service FileOP {
     rpc UploadFile (stream FileChunk) returns (FileUploadStatus);
+	rpc GetFilesList (google.protobuf.Empty) returns (stream FileList);
 }
 
 message FileChunk {
@@ -25,5 +27,9 @@ message FileUploadStatus {
 	reserved 2;
 	google.protobuf.StringValue msg = 3;
 	string file_name = 4;
+}
+
+message FileList {
+	string fileName = 1;
 }
 

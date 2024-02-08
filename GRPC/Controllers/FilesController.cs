@@ -24,4 +24,11 @@ public class FilesController : ControllerBase
 		? Ok(result)
 		: BadRequest(result);
 	}
+
+	[HttpGet("list")]
+	public async Task<IActionResult> GetFileList(CancellationToken token){
+		var result = await _storageClientService.GetFileNames(token);
+
+		return Ok(result);
+	}
 }

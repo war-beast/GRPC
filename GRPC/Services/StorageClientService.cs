@@ -14,6 +14,21 @@ namespace GRPC.Client.Services
 			_client = client;
 		}
 
+		public async Task<IReadOnlyCollection<string>> GetFileNames(CancellationToken token)
+		{
+			List<string> result = [];
+
+			var serverData = _client.GetFilesList(new Google.Protobuf.WellKnownTypes.Empty());
+			var responseStream = serverData.ResponseStream;
+			while (await responseStream.MoveNext(new CancellationToken()))
+			{
+				var response = responseStream.Current;
+				result.Add(response.FileName);
+			}
+
+			return result;
+		}
+
 		public async Task<string> UploadFile(IFormFile file)
 		{
 			using var stream = file.OpenReadStream();
@@ -36,8 +51,8 @@ namespace GRPC.Client.Services
 				await request.RequestStream.CompleteAsync();
 				fileOpResult = await request.ResponseAsync;
 
-				return fileOpResult.Ok 
-					? string.Empty 
+				return fileOpResult.Ok
+					? string.Empty
 					: fileOpResult.Msg;
 			}
 			catch (Exception exc)
