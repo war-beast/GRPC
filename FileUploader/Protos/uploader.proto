@@ -22,7 +22,8 @@ message FileChunk {
 message FileUploadStatus {
     bool ok = 1;
 	// Transfer success will generate a unique identifier
-	int64 file_id = 2;
+	reserved 2;
 	google.protobuf.StringValue msg = 3;
+	string file_name = 4;
 }
 

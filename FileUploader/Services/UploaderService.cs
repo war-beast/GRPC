@@ -21,9 +21,7 @@ namespace FileUploader.Services
 			{
 				var filename = requestStream.Current.FileName;
 
-				using var fileStream = new MemoryStream();
-				requestStream.Current.FileData.WriteTo(fileStream);
-				var fileBytes = fileStream.ToArray();
+				var fileBytes = requestStream.Current.FileData.ToArray();
 
 				var client = _minioClientFactory.CreateClient("grpc");
 
@@ -31,17 +29,17 @@ namespace FileUploader.Services
 					var putObjectArgs = new PutObjectArgs()
 						.WithBucket(bucketName)
 						.WithObject(filename)
-						.WithStreamData(new MemoryStream(fileStream.GetBuffer()))
-						.WithObjectSize(fileStream.Length)
+						.WithStreamData(new MemoryStream(fileBytes))
+						.WithObjectSize(fileBytes.Length)
 						.WithContentType("application/octet-stream");
 					await client.PutObjectAsync(putObjectArgs);
 				}
 				catch (Exception ex) {
-					var ms = ex.Message;
+					return new FileUploadStatus { FileName = filename, Msg = ex.Message, Ok = false };
 				}
 			}
 
-			return new FileUploadStatus { FileId = 1, Msg = "ок", Ok = true };
+			return new FileUploadStatus { FileName = string.Empty, Msg = "ок", Ok = true };
 		}
 	}
 }

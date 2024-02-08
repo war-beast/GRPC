@@ -1,5 +1,4 @@
 ﻿using Google.Protobuf;
-using Grpc.Net.Client;
 using GRPC.Client.Interfaces;
 using static GRPC.Client.FileOP;
 
@@ -26,19 +25,20 @@ namespace GRPC.Client.Services
 			FileUploadStatus fileOpResult;
 			try
 			{
-				while (totallength > 0)
+				var len = await stream.ReadAsync(buffer);
+				await request.RequestStream.WriteAsync(new FileChunk
 				{
-					var len = await stream.ReadAsync(buffer);
-					totallength -= len;
-					await request.RequestStream.WriteAsync(new FileChunk
-					{
-						FileName = file.FileName,
-						NameSpace = Appcode,
-						FileData = ByteString.CopyFrom(buffer, 0, len)
-					});
-				}
+					FileName = file.FileName,
+					NameSpace = Appcode,
+					FileData = ByteString.CopyFrom(buffer, 0, len)
+				});
+
 				await request.RequestStream.CompleteAsync();
 				fileOpResult = await request.ResponseAsync;
+
+				return fileOpResult.Ok 
+					? string.Empty 
+					: fileOpResult.Msg;
 			}
 			catch (Exception exc)
 			{
@@ -48,8 +48,6 @@ namespace GRPC.Client.Services
 			{
 				stream.Close();
 			}
-
-			return string.Empty;
 		}
 	}
 }
