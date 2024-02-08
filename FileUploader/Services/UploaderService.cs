@@ -2,8 +2,6 @@
 using Grpc.Core;
 using Minio.AspNetCore;
 using Minio.DataModel.Args;
-using System.IO;
-using System.Security.AccessControl;
 
 namespace FileUploader.Services
 {
@@ -18,22 +16,30 @@ namespace FileUploader.Services
 
 		public override async Task<FileUploadStatus> UploadFile(IAsyncStreamReader<FileChunk> requestStream, ServerCallContext context)
 		{
-			var bucketName = "grpcTest";
-			var filename = requestStream.Current.FileName;
+			var bucketName = "grpc-learning";
+			while (await requestStream.MoveNext())
+			{
+				var filename = requestStream.Current.FileName;
 
-			using var fileStream = new MemoryStream();
-			requestStream.Current.FileData.WriteTo(fileStream);
-			var fileBytes = fileStream.ToArray();
+				using var fileStream = new MemoryStream();
+				requestStream.Current.FileData.WriteTo(fileStream);
+				var fileBytes = fileStream.ToArray();
 
-			var client = _minioClientFactory.CreateClient("grpc");
+				var client = _minioClientFactory.CreateClient("grpc");
 
-			var putObjectArgs = new PutObjectArgs()
-							.WithBucket(bucketName)
-							.WithObject(filename)
-							.WithStreamData(fileStream)
-							.WithObjectSize(fileStream.Length)
+				try{
+					var putObjectArgs = new PutObjectArgs()
+						.WithBucket(bucketName)
+						.WithObject(filename)
+						.WithStreamData(new MemoryStream(fileStream.GetBuffer()))
+						.WithObjectSize(fileStream.Length)
 						.WithContentType("application/octet-stream");
-			await client.PutObjectAsync(putObjectArgs);
+					await client.PutObjectAsync(putObjectArgs);
+				}
+				catch (Exception ex) {
+					var ms = ex.Message;
+				}
+			}
 
 			return new FileUploadStatus { FileId = 1, Msg = "ок", Ok = true };
 		}

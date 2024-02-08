@@ -15,9 +15,9 @@ public class FilesController : ControllerBase
 	}
 
 	[HttpPost("upload")]
-	public async Task<IActionResult> Upload()
+	public async Task<IActionResult> Upload(IFormCollection formData)
 	{
-		var files = HttpContext.Request.Form.Files;
+		var files = formData.Files;
 		var result = await _storageClientService.UploadFile(files[0]);
 
 		return result.Equals(string.Empty, StringComparison.InvariantCultureIgnoreCase) 

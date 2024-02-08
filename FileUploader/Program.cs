@@ -9,12 +9,14 @@ builder.Services.AddGrpc();
 
 builder.Services.AddMinio("grpc", options =>
 {
-	options.Endpoint = "host.docker.internal:9090";
-	// ...
+	options.Endpoint = "host.docker.internal:9000";
+	options.AccessKey = "h2mvsldpgXfpcqVN5bQX";
+	options.SecretKey = "W7plH3UuoncU7kcFR8cnZ92SUoyf2uc9svFPpgt3";
+	
+	
 	options.ConfigureClient(client =>
 	{
 		client.WithSSL(false);
-		client.WithCredentials("P5tVlBHKmmQrKcrI4mlm", "GLVWUiokXBwDK9OeBCgkEwmArgdTISCBOPHljCv1");
 	});
 });
 
